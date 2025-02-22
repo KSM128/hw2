@@ -7,7 +7,9 @@
 using namespace std;
 std::string convToLower(std::string src)
 {
-    std::transform(src.begin(), src.end(), src.begin(), ::tolower);
+    for(size_t i = 0; i < src.size(); i++){
+      src[i] = std::tolower(static_cast<char>(src[i]));
+    }
     return src;
 }
 
@@ -15,16 +17,32 @@ std::string convToLower(std::string src)
     to a set of words based on the criteria given in the assignment **/
 std::set<std::string> parseStringToWords(string rawWords)
 {
+  std::set<std::string> output;
+  std::string trimmed = trim(rawWords);
+  std::string tempKeyword;
 
+  // go through trimmed string
+  for(std::string::iterator it = trimmed.begin(); it != trimmed.end(); ++it){
+    char c = *it;
+    // if char isn't punc 
+    if(!(std::ispunct(c) || std::isspace(c))){
+      tempKeyword.push_back(c);
+    } else {
+      // upon punc, check for len >= 2
+      if(tempKeyword.size() >= 2){
+        // insert a lower case 
+        output.insert(convToLower(tempKeyword));
+      } 
+      tempKeyword.clear();
+    }
 
+    // this is added to deal with puncs/space at end of word
+    if(tempKeyword.size() >= 2){
+      output.insert(convToLower(tempKeyword));
+    }
+  }
 
-
-
-
-
-
-
-
+  return output;
 }
 
 /**************************************************
